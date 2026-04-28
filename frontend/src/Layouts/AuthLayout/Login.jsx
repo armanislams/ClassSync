@@ -1,6 +1,8 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import { useState } from 'react';
+import { FaRegEye, FaRegEyeSlash, FaSpinner } from 'react-icons/fa';
 
 const Login = () => {
   const {
@@ -8,10 +10,15 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-const {signIn} = useAuth()
-  const onSubmit = (data) => {
-    // Firebase auth will be implemented here later
-    console.log('Login attempt with:', data);
+  const [show, setShow] = useState(false);
+const {signIn, loading} = useAuth()
+const navigate = useNavigate()
+  const onSubmit = async (data) => {
+    const result = await signIn(data.email, data.password)
+if(result.user.accessToken){
+    // console.log(result.user.accessToken);
+    navigate('/')
+}
   };
 
   return (
@@ -45,18 +52,27 @@ const {signIn} = useAuth()
               <label className="label">
                 <span className="label-text font-medium">Password</span>
               </label>
-              <input
-                type="password"
-                placeholder="Enter your password"
-                className={`input input-bordered w-full focus:input-primary transition-colors ${errors.password ? 'input-error' : ''}`}
-                {...register('password', {
-                  required: 'Password is required',
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/,
-                    message: "Password must be at least 8 characters, include an uppercase, a lowercase, and a symbol"
-                  }
-                })}
-              />
+              <div className="relative">
+                <input
+                  type={show ? "text" : "password"}
+                  placeholder="Enter your password"
+                  className={`input input-bordered w-full focus:input-primary transition-colors pr-10 ${errors.password ? 'input-error' : ''}`}
+                  {...register('password', {
+                    required: 'Password is required',
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/,
+                      message: "Password must be at least 8 characters, include an uppercase, a lowercase, and a symbol"
+                    }
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShow(!show)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/60 hover:text-primary transition-colors"
+                >
+                  {show ? <FaRegEyeSlash size={18} /> : <FaRegEye size={18} />}
+                </button>
+              </div>
               {errors.password && (
                 <label className="label">
                   <span className="label-text-alt text-error">{errors.password.message}</span>
@@ -71,8 +87,8 @@ const {signIn} = useAuth()
               )}
             </div>
 
-            <button type="submit" className="btn btn-primary w-full mt-2">
-              Sign In
+            <button type="submit" className={`btn btn-primary w-full mt-2  ${loading && 'disabled:cursor-not-allowed disabled:opacity-70'}`}>
+              {loading ? <FaSpinner size={20} /> : 'Sign In'}
             </button>
           </form>
 

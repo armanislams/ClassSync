@@ -1,6 +1,8 @@
 import { Link } from 'react-router';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import { useState } from 'react';
+import { FaRegEye, FaRegEyeSlash, FaSpinner } from 'react-icons/fa';
 
 const Register = () => {
   const {
@@ -13,6 +15,7 @@ const Register = () => {
       role: 'student'
     }
   });
+  const [show, setShow] = useState(false);
 
 const {register: signup, loading: authLoading}= useAuth()
 
@@ -119,8 +122,9 @@ const {register: signup, loading: authLoading}= useAuth()
               <label className="label">
                 <span className="label-text font-medium">Password</span>
               </label>
-              <input
-                type="password"
+              <div className='relative'>
+                <input
+                type={show ? 'text' : "password"}
                 placeholder="Create a password"
                 className={`input input-bordered w-full focus:input-primary transition-colors ${errors.password ? 'input-error' : ''}`}
                 {...register('password', {
@@ -131,6 +135,14 @@ const {register: signup, loading: authLoading}= useAuth()
                   }
                 })}
               />
+               <button
+                                type="button"
+                                onClick={() => setShow(!show)}
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-base-content/60 hover:text-primary transition-colors"
+                              >
+                                {show ? <FaRegEyeSlash size={18} /> : <FaRegEye size={18} />}
+                              </button>
+              </div>
               {errors.password && (
                 <label className="label">
                   <span className="label-text-alt text-error">{errors.password.message}</span>
@@ -138,8 +150,8 @@ const {register: signup, loading: authLoading}= useAuth()
               )}
             </div>
 
-            <button type="submit" className={`btn w-full mt-4 ${selectedRole === 'teacher' ? 'btn-secondary' : 'btn-primary'}`}>
-              {authLoading ? "Creating Account..." : "Create Account"}
+            <button type="submit" className={`btn w-full mt-4 ${selectedRole === 'teacher' ? 'btn-secondary' : 'btn-primary'} ${authLoading && 'disabled:cursor-not-allowed disabled:opacity-70'}`}>
+              {authLoading ? <FaSpinner size={20} /> : "Create Account"}
             </button>
           </form>
 
