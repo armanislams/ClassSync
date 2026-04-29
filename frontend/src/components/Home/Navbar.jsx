@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
-import useAuth from "../../../hooks/useAuth";
-import { AuthBtns } from "../AuthBtns";
-import Logo from "../logo";
+import useAuth from "../../hooks/useAuth";
+import { AuthBtns } from "../common/AuthBtns";
+import Logo from "../common/logo";
 
 const Navbar = () => {
     const {user}=useAuth()

@@ -1,9 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Logo from '../../components/common/logo';
-import { AuthBtns } from '../../components/common/AuthBtns';
-import useAuth from '../../hooks/useAuth';
-import Navbar from '../../components/common/Home/Navbar';
+import Navbar from '../../components/Home/Navbar';
 
 
 

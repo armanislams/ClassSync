@@ -8,11 +8,15 @@ import AddSlot from '../Teacher/AddSlot';
 import MySlots from '../Teacher/MySlots';
 import BookSlot from '../Student/BookSlot';
 import MyBookings from '../Student/MyBookings';
-// import PrivateRoute from '../../components/PrivateRoute';
+import PrivateRoute from '../../context/PrivateRoute/PrivateRoute';
+import Loader from '../../components/common/Loader';
+import Error from '../../components/common/Error';
 
 const router = createBrowserRouter([
     {
         path: "/",
+        hydrateFallbackElement: <Loader/>,
+        errorElement: <Error/>,
         element: <Home />
     },
     {
@@ -25,12 +29,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/dashboard",
-        // element: (
-        //     <PrivateRoute>
-    //     //         <DashboardLayout />
-    //     //     </PrivateRoute>
-    // ),
-        Component: DashboardLayout,
+        element: (
+            <PrivateRoute>
+                <DashboardLayout />
+            </PrivateRoute>
+        ),
         children: [
             {
                 index: true,
