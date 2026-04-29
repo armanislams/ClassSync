@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import useAuth from '../../hooks/useAuth';
-// import useSlots from '../../hooks/useSlots';
+import useSlots from '../../hooks/useSlots';
 import { FaCalendarAlt, FaClock, FaCheck } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const BookSlot = () => {
   const { user } = useAuth();
   const { availableSlots, bookSlot } = useSlots();
-  const [booked, setBooked] = useState(null);
   const [confirming, setConfirming] = useState(null);
-
-  const handleBook = (slot) => {
-    bookSlot(slot.id, user?.displayName || 'Student', user?.email);
-    setBooked(slot.id);
-    setConfirming(null);
-    setTimeout(() => setBooked(null), 4000);
+  const handleBook = async (slot) => {
+    const result = await bookSlot(slot.id, user?.displayName || 'Student', user?.email);
+    if(result.success) {
+      toast.success('Slot booked successfully! Check My Bookings for details.');
+      setConfirming(null);
+    } else {
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -24,12 +26,6 @@ const BookSlot = () => {
           Choose from {availableSlots.length} available time slot{availableSlots.length !== 1 ? 's' : ''}.
         </p>
       </div>
-
-      {booked && (
-        <div className="alert alert-success shadow-sm">
-          <FaCheck /> Slot booked successfully! Check <strong>My Bookings</strong> for details.
-        </div>
-      )}
 
       {availableSlots.length === 0 ? (
         <div className="card bg-base-100 shadow-sm border border-base-300">

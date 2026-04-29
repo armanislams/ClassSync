@@ -1,5 +1,5 @@
 import useAuth from '../../hooks/useAuth';
-// import useSlots from '../../hooks/useSlots'; 
+import useSlots from '../../hooks/useSlots';
 import { FaUserGraduate, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router';
 

@@ -1,5 +1,6 @@
 import { NavLink, Outlet, useNavigate } from 'react-router';
 import useAuth from '../../hooks/useAuth';
+import useRole from '../../hooks/useRole';
 import {
   FaChalkboardTeacher,
   FaCalendarPlus,
@@ -15,9 +16,8 @@ const DashboardLayout = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { role, roleLoading } = useRole();
 
-  // Role stored in localStorage after register (set by Register page)
-  const role = localStorage.getItem('classsync_role') || 'teacher';
   const isTeacher = role === 'teacher';
 
   const handleLogout = async () => {

@@ -1,14 +1,12 @@
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
-// import useSlots from '../../hooks/useSlots';
+import useSlots from '../../hooks/useSlots';
 import { FaCalendarPlus, FaInfoCircle } from 'react-icons/fa';
-import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddSlot = () => {
   const { user } = useAuth();
   const { addSlot } = useSlots();
-  const [feedback, setFeedback] = useState(null); // { type: 'success' | 'error', msg }
-
   const {
     register,
     handleSubmit,
@@ -16,15 +14,14 @@ const AddSlot = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const result = addSlot(data.date, data.time, user?.displayName || user?.email || 'Teacher');
+  const onSubmit = async (data) => {
+    const result = await addSlot(data.date, data.time, user?.displayName || user?.email || 'Teacher');
     if (result.success) {
-      setFeedback({ type: 'success', msg: 'Slot added successfully! It is now 15 minutes long.' });
+      toast.success('Slot added successfully! It is now 15 minutes long.');
       reset();
     } else {
-      setFeedback({ type: 'error', msg: result.error });
+      toast.error(result.error);
     }
-    setTimeout(() => setFeedback(null), 4000);
   };
 
   // Min date = today in YYYY-MM-DD format
@@ -36,12 +33,6 @@ const AddSlot = () => {
         <h2 className="text-2xl font-bold text-base-content">Add New Slot</h2>
         <p className="text-base-content/60 mt-1">Create a 15-minute time slot for students to book.</p>
       </div>
-
-      {feedback && (
-        <div className={`alert ${feedback.type === 'success' ? 'alert-success' : 'alert-error'} shadow-sm`}>
-          <span>{feedback.msg}</span>
-        </div>
-      )}
 
       <div className="card bg-base-100 shadow-sm border border-base-300">
         <div className="card-body">

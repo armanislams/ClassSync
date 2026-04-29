@@ -1,4 +1,4 @@
-// import useSlots from '../../hooks/useSlots';
+import useSlots from '../../hooks/useSlots';
 import { FaCalendarAlt, FaTrash, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router';
 
