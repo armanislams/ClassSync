@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Logo from '../../components/common/logo';
+import { ToastContainer } from 'react-toastify';
 
 const Navbar = () => (
   <div className="navbar bg-base-100 shadow-sm fixed top-0 z-50">
@@ -147,6 +148,7 @@ export default function Home() {
       <Features />
       <HowItWorks />
       <Footer />
+      <ToastContainer/>
     </div>
   );
 }

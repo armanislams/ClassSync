@@ -1,8 +1,10 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import { useState } from 'react';
 import { FaRegEye, FaRegEyeSlash, FaSpinner } from 'react-icons/fa';
+import useAxios from '../../hooks/useAxios';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const {
@@ -15,6 +17,8 @@ const Register = () => {
       role: 'student'
     }
   });
+  const axiosInstance = useAxios()
+  const navigate = useNavigate()
   const [show, setShow] = useState(false);
 
 const {register: signup, loading: authLoading}= useAuth()
@@ -24,6 +28,11 @@ const {register: signup, loading: authLoading}= useAuth()
   const onSubmit = async (data) => {
     const result = await signup(data.email, data.password)
     if (result) {
+      const res = await axiosInstance.post('/auth/signUp', data)
+      if(res.status === 201){
+        toast.success('Registered successfully')
+        navigate('/')
+      }
       console.log('Register attempt with:', data);
     }
   };
