@@ -30,3 +30,25 @@ export const getAllUser =async(req,res)=>{
         })
     }
 }
+
+export const getUserRole=async(req,res)=>{
+    const {email} = req.params
+    try {
+        const user = await User.findOne({email})
+        if (!user) {
+            return res.status(200).json({
+                success:false,
+                message: "User Not Found"
+            })
+        }
+        res.status(200).json({
+            success:true,
+            role: user.role
+        })
+    } catch (error) {
+        res.status(500).json({
+            success:false,
+            message: "Internel Server Error"
+        })
+    }
+}

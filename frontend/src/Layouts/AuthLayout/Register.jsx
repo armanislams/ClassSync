@@ -26,15 +26,18 @@ const {register: signup, loading: authLoading}= useAuth()
   const selectedRole = watch('role');
 
   const onSubmit = async (data) => {
-    const result = await signup(data.email, data.password)
-    if (result) {
+    signup(data.email, data.password).then(async ()=>{
       const res = await axiosInstance.post('/auth/signUp', data)
       if(res.status === 201){
         toast.success('Registered successfully')
         navigate('/')
       }
-      console.log('Register attempt with:', data);
-    }
+   })
+   .catch((error)=>{
+    console.log(error);
+    
+    toast.error(error.message)
+   })
   };
 
   return (

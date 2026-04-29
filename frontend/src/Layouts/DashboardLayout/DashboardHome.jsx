@@ -2,11 +2,13 @@ import useAuth from '../../hooks/useAuth';
 // import useSlots from '../../hooks/useSlots';
 import { FaCalendarAlt, FaCheckCircle, FaClock, FaUserGraduate } from 'react-icons/fa';
 import { Link } from 'react-router';
+import useRole from '../../hooks/useRole';
 
 const DashboardHome = () => {
   const { user } = useAuth();
-  const { slots, availableSlots, bookedSlots } = useSlots();
-  const role = localStorage.getItem('classsync_role') || 'student';
+  // const { slots, availableSlots, bookedSlots } = useSlots()
+  const {role} = useRole()
+  
   const isTeacher = role === 'teacher';
 
   const StatCard = ({ icon, label, value, color }) => (
@@ -173,6 +175,7 @@ const DashboardHome = () => {
         </div>
       )}
     </div>
+    
   );
 };
 
